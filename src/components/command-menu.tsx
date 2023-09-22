@@ -9,6 +9,7 @@ import { useTheme } from "next-themes";
 export default function CommandMenu() {
   // const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [placeholder, setPlaceholder] = useState("Search for commands...");
   const [pages, setPages] = useState<string[]>([]);
   const page = pages[pages.length - 1];
 
@@ -18,6 +19,8 @@ export default function CommandMenu() {
   const { currentThoughtId } = useCurrentThought();
   const { open, setOpen } = useCommandMenuStore();
   const deleteThought = useThoughts((state) => state.delete);
+  const getThought = useThoughts((state) => state.get);
+  const editThought = useThoughts((state) => state.edit);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -68,7 +71,7 @@ export default function CommandMenu() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-lg bg-surface text-left align-middle shadow-xl transition-all border border-border">
+                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-lg bg-background text-left align-middle shadow-xl transition-all border border-border">
                   <Command
                     onKeyDown={(e) => {
                       // Escape goes to previous page
@@ -79,29 +82,44 @@ export default function CommandMenu() {
                       ) {
                         e.preventDefault();
                         setPages((pages) => pages.slice(0, -1));
+                        setPlaceholder("Search for commands...");
                       }
                     }}
                     className="divide-y divide-border"
+                    filter={(value, search) => {
+                      if (page === "edit-thought") return 1;
+                      if (value.includes(search)) return 1;
+                      return 0;
+                    }}
+                    loop
                   >
                     <Command.Input
                       value={search}
                       onValueChange={setSearch}
-                      className="outline-none w-full bg-surface py-3 border-none focus:ring-0 rounded-t-lg placeholder:text-sm"
-                      placeholder="Search for commands..."
+                      className="outline-none w-full bg-background py-3 border-none focus:ring-0 rounded-t-lg placeholder:text-sm"
+                      placeholder={placeholder}
                     />
-                    <Command.List className="max-h-96 overflow-auto p-2 bg-surface">
+
+                    <Command.List className="max-h-96 overflow-auto p-2 bg-background">
+                      <Command.Empty className="text-sm text-subtitle text-center py-8">
+                        No results found.
+                      </Command.Empty>
                       {!page && (
                         <>
                           {currentThoughtId !== null && (
-                            <Command.Group heading="Thoughts">
-                              {/* TODO: Add edit feature */}
-                              {/* <Command.Item
+                            <Command.Group heading="Thought">
+                              <Command.Item
                                 onSelect={() => {
-                                  console.log(currentThoughtId);
+                                  setPages([...pages, "edit-thought"]);
+                                  setPlaceholder("Edit thought");
+                                  const thought = getThought(currentThoughtId);
+                                  if (thought) {
+                                    setSearch(thought.value);
+                                  }
                                 }}
                               >
                                 Edit
-                              </Command.Item> */}
+                              </Command.Item>
                               <Command.Item
                                 onSelect={() => {
                                   deleteThought(currentThoughtId);
@@ -118,6 +136,7 @@ export default function CommandMenu() {
                               onSelect={() => {
                                 setPages([...pages, "themes"]);
                                 setSearch("");
+                                setPlaceholder("Select theme");
                               }}
                             >
                               Change theme...
@@ -126,6 +145,9 @@ export default function CommandMenu() {
                               onSelect={() => {
                                 setPages([...pages, "voice"]);
                                 setSearch("");
+                                setPlaceholder(
+                                  "Select voice for text to speech"
+                                );
                               }}
                             >
                               Change voice...
@@ -134,6 +156,7 @@ export default function CommandMenu() {
                               onSelect={() => {
                                 setPages([...pages, "speech-lang"]);
                                 setSearch("");
+                                setPlaceholder("Select speech language");
                               }}
                             >
                               Change speech language...
@@ -203,6 +226,21 @@ export default function CommandMenu() {
                         <>
                           <Command.Item>Lang 1</Command.Item>
                           <Command.Item>Lang 2</Command.Item>
+                        </>
+                      )}
+
+                      {page === "edit-thought" && (
+                        <>
+                          <Command.Item
+                            onSelect={() => {
+                              if (currentThoughtId) {
+                                editThought(currentThoughtId, search);
+                              }
+                              closeModal();
+                            }}
+                          >
+                            Edit thought to &quot;{search}&quot;
+                          </Command.Item>
                         </>
                       )}
                     </Command.List>

@@ -41,6 +41,17 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       updateTextAreaSize(textAreaRef.current);
     }, [value]);
 
+    const saveThought = () => {
+      if (value && value.toString().length > 0) {
+        if (id) {
+          edit(id, value.toString());
+        } else {
+          add(value.toString());
+        }
+      }
+      setValue("");
+    };
+
     return (
       <div className="space-y-4">
         <h1 className="text-xl font-bold text-title">Today</h1>
@@ -59,22 +70,19 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               style={{ height: 0 }}
               value={value}
               onChange={(e) => {
+                // if (e.target.value !== "\n") setValue(e.target.value);
                 setValue(e.target.value);
               }}
-              title="Ctrl + Enter to save your thought."
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                  if (value) {
-                    if (id) {
-                      edit(id, value.toString());
-                    } else {
-                      add(value.toString());
-                    }
-                  }
-                  setValue("");
-                }
+              title="Click outside the textarea to save your thought."
+              // onKeyDown={(e) => {
+              //   if (e.key === "Enter") {
+              //     saveThought();
+              //   }
+              // }}
+              onBlur={() => {
+                saveThought();
               }}
-              className="flex-grow resize-none overflow-hidden pl-3 py-3 pr-12 outline-none w-full border-none focus:ring-0 bg-surface rounded-lg hover:bg-hover"
+              className="flex-grow resize-none overflow-hidden pl-3 py-3 pr-12 outline-none w-full border-none focus:ring-0 bg-surface rounded-lg"
               placeholder="What's on your mind?"
               {...props}
             />

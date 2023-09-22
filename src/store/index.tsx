@@ -34,11 +34,12 @@ type Thoughts = {
   add: (value: string) => void;
   edit: (id: string, value: string) => void;
   delete: (id: string) => void;
+  get: (id: string) => Thought | undefined;
 };
 
 export const useThoughts = create(
   persist<Thoughts>(
-    (set) => ({
+    (set, get) => ({
       thoughts: [],
       add: (value) => {
         const thought = {
@@ -76,6 +77,7 @@ export const useThoughts = create(
             thoughts: newThoughts,
           };
         }),
+      get: (id: string) => get().thoughts.find((thought) => thought.id === id),
     }),
     {
       name: "REFLECT_THOUGHTS",

@@ -88,8 +88,6 @@ const useSpeechToText = (): {
   transcript: string | null;
 } => {
   const [speechRecognition, setSpeechRecognition] = useState<any | null>(null);
-  const [speechResult, setSpeechResult] =
-    useState<SpeechRecognitionResult | null>(null);
   const [transcript, setTranscript] = useState("");
 
   const handleSpeechResult = (event: any) => {

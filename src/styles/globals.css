@@ -4,7 +4,7 @@
 
 :root {
   --bg: 254, 255, 254;
-  --surface: 254, 255, 254;
+  --surface: 245, 245, 245;
   --text: 0, 0, 0;
   --subtitle: 92, 94, 99;
   --border: 227, 227, 227;
@@ -54,11 +54,11 @@
   }
 
   [cmdk-item]:hover {
-    background-color: theme("colors.hover");
+    background-color: theme("colors.surface");
   }
 
   [cmdk-item][aria-selected="true"] {
-    background-color: theme("colors.hover");
+    background-color: theme("colors.surface");
   }
 
   html {
