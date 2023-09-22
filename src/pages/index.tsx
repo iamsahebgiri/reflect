@@ -23,6 +23,16 @@ export default function Home() {
           <Textarea value={value} setValue={setValue} />
           {/* <TextToSpeech /> */}
           <Thoughts />
+          <div className="text-sm text-center text-subtitle py-12">
+            Use{" "}
+            <kbd className="bg-surface h-6 w-6 text-xs font-semibold rounded inline-flex items-center justify-center">
+              ⌘
+            </kbd>{" "}
+            <kbd className="bg-surface h-6 w-6 text-sm font-semibold rounded inline-flex items-center justify-center">
+              K
+            </kbd>{" "}
+            while hovering on thought and see magic happens.
+          </div>
         </div>
       </main>
     </>

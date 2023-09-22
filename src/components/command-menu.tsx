@@ -71,7 +71,7 @@ export default function CommandMenu() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-lg bg-background text-left align-middle shadow-xl transition-all border border-border">
+                <Dialog.Panel className="w-full max-w-xl transform-gpu overflow-hidden rounded-lg bg-background text-left align-middle shadow-xl transition- border border-border">
                   <Command
                     onKeyDown={(e) => {
                       // Escape goes to previous page

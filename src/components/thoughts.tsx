@@ -20,7 +20,7 @@ export default function Thoughts() {
 
   if (thoughts.length === 0) {
     return (
-      <div className="py-4 text-center text-subtitle">
+      <div className="py-12 text-center text-subtitle">
         <p>Hmm, is your mind really empty?</p>
       </div>
     );
